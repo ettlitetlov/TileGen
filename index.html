@@ -545,7 +545,7 @@
         
         <script>
             
-    var camera, scene, renderer;
+    var camera, scene, renderer, start,time;
     var geometry, material, mesh, procPlane, genericMaterial, mesh2;
     var pLight, pLight2, aLight, dirLight;
     var FizzyText, text;
@@ -554,6 +554,9 @@
     animate();
 
     function init() {
+
+        time = new Date();
+        start = time.getTime();
 
         camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 10 );
         camera.position.z = 1;
@@ -650,11 +653,16 @@
 
         requestAnimationFrame( animate );
 
+        var d = new Date()
+        var end = d.getTime();
+        var deltaTime = end - start;
         // Setting Rotation
-        mesh.rotation.y += 0.005;
-        mesh2.rotation.y += 0.005;
+        mesh.rotation.y = deltaTime * 0.0005;
+        mesh2.rotation.y = deltaTime * 0.0005;
 
-        mesh2.material.uniforms.u_time.value += 0.01;
+        
+
+        mesh2.material.uniforms.u_time.value = deltaTime * 0.0013;
 
         // Setting parameters from GUI
         mesh2.material.uniforms.noiseIntensity.value = text.noiseIntensity;
@@ -664,7 +672,7 @@
         mesh2.material.uniforms.brightness.value = text.brightness;
 
         // Increasing time
-        mesh2.material.uniforms.u_time.value += 0.01;
+        mesh2.material.uniforms.u_time.value = deltaTime * 0.0013;
 
         renderer.render( scene, camera );
         
